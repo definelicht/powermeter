@@ -1,0 +1,3 @@
+[submodule "OpenCorsairLink"]
+	path = OpenCorsairLink
+	url = https://github.com/audiohacked/OpenCorsairLink.git

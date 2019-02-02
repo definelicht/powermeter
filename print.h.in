@@ -1,0 +1,16 @@
+#include "${POWERMETER_OPENCORSAIRLINK_INCLUDE_DIR}/print.h"
+
+#undef msg_err
+#undef msg_warn 
+#undef msg_info
+#undef msg_debug
+#undef msg_debug2
+#undef msg_spew
+#undef msg_machine
+#define msg_err(...)
+#define msg_warn(...) 
+#define msg_info(...)
+#define msg_debug(...)
+#define msg_debug2(...)
+#define msg_spew(...)
+#define msg_machine(...)
