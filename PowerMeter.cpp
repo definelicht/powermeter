@@ -81,6 +81,8 @@ PowerMeter::~PowerMeter() {
 }
 
 void PowerMeter::Start() {
+
+  samples_ = decltype(samples_)(); // Reset sample vector
   running_ = true;
 
   future_ = std::async(std::launch::async, [this]() {
