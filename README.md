@@ -1,6 +1,6 @@
 ## Overview
 
-This tool enables the readout of drawn power and supplied power from Corsair RMi-series power supplies through in a stopwatch-like fashion, using the [OpenCorsairLink](https://github.com/audiohacked/OpenCorsairLink) project as a driver for the USB interface.
+This tool enables the readout of drawn power and supplied power from [Corsair RMi-series](https://www.corsair.com/us/en/Power/Plug-Type/rmi-series-config/p/CP-9020082-NA) power supplies through in a stopwatch-like fashion, using the [OpenCorsairLink](https://github.com/audiohacked/OpenCorsairLink) project as a driver for the USB interface.
 The sampling rate is configurable, and results can be either stored in memory, or written directly to a file.
 
 ## Prerequisties
@@ -24,6 +24,8 @@ To use the tool within an existing project, either use the provided CMake config
 ## Usage
 
 See `examples/Example.cpp` for example usage.
+
+**Note that all executables must be run with `sudo` privileges to interact with the USB interface.**
 
 The `PowerMeter` class provides stopwatch-like functionality for measuring power:
 
@@ -50,6 +52,14 @@ Or, directly to standard output:
 ```cpp
 PowerMeter pm(50, std::cout); // Samples are written directly to the terminal/standard out
 ```
+
+## Running
+
+The included example executable prints power measurements to standard output for a given time, with a given interval:
+```bash
+sudo ./Example 5 50
+```
+This will print samples every 50 milliseconds for 5 seconds.
 
 ## Bugs and suggestions
 
