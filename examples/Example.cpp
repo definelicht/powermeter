@@ -31,6 +31,8 @@ int main(int argc, char **argv) {
     sampling_interval = std::stoul(argv[2]);
   }
   PowerMeter pm(sampling_interval, std::cout);
+  std::cout << "Microseconds since epoch, drawn power, supplied power:\n"
+            << std::flush;
   pm.Start();
   std::this_thread::sleep_for(std::chrono::seconds(duration));
   pm.Stop();

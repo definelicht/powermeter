@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include <chrono>
 #include <iostream>
 
 extern "C" {
@@ -77,6 +78,7 @@ void PowerMeter::Init() {
 }
 
 PowerMeter::~PowerMeter() {
+  Stop();
   device_->driver->power.sensor_select(device_, handle_, 0);
   device_->driver->deinit(handle_, device_->write_endpoint);
   corsairlink_close(context_);
@@ -88,7 +90,11 @@ void PowerMeter::Start() {
   running_ = true;
 
   future_ = std::async(std::launch::async, [this]() {
+    std::chrono::high_resolution_clock timer;
     while (running_) {
+
+      auto timestamp = timer.now();
+
       // Fetch wallpower draw
       double total_watts;
       device_->driver->power.total_wattage(device_, handle_, &total_watts);
@@ -110,9 +116,10 @@ void PowerMeter::Start() {
 
       // Log the measurement
       if (output_file_ != nullptr) {
-        *output_file_ << total_watts << "," << supply_watts_sum << "\n";
+        *output_file_ << timestamp.time_since_epoch().count() << ","
+                      << total_watts << "," << supply_watts_sum << "\n";
       } else {
-        samples_.emplace_back(total_watts, supply_watts_sum);
+        samples_.emplace_back(timestamp, total_watts, supply_watts_sum);
       }
 
       // Sleep until next sample should be made
@@ -123,8 +130,25 @@ void PowerMeter::Start() {
   });  // End std::async lambda
 }
 
-std::vector<std::pair<double, double>> const& PowerMeter::Stop() {
-  running_ = false;
-  future_.wait();
-  return samples_;
+void PowerMeter::Stop() {
+  if (running_) {
+    running_ = false;
+    future_.wait();
+  }
+}
+
+void PowerMeter::Reset() {
+  Stop();
+  samples_ = decltype(samples_)();
+}
+
+std::vector<std::tuple<PowerMeter::Time_t, double, double>>
+PowerMeter::GetSamples() const {
+  return samples_;  // Copy the internal sample buffer
+}
+
+void PowerMeter::PopSamples(
+    std::vector<std::tuple<Time_t, double, double>>& samples) {
+  samples = std::move(samples_);  // Move internal sample buffer to output
+  samples_ = decltype(samples_)();
 }
