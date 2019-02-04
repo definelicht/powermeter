@@ -19,7 +19,7 @@ make install
 
 This will install the required header files, along with the `libpowermeter` static library.
 
-To use the tool within an existing project, either use the provided CMake configuration, or simply include `<installation directory>/include` and link to `<installation directory>/lib/libpowermeter.a`.
+To use the tool within an existing project, either use the provided CMake configuration, or simply include `<installation directory>/include/powermeter` and link to `<installation directory>/lib/libpowermeter.a`.
 
 ## Usage
 
