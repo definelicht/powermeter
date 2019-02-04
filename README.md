@@ -33,8 +33,9 @@ The `PowerMeter` class provides stopwatch-like functionality for measuring power
 PowerMeter pm(50);      // Write samples directly to standard output every 50 milliseconds
 pm.Start();             // Start sampling
 // ...do interesting work...
-auto power = pm.Stop(); // Returns a vector<std::pair<double, double>>, where each entry
-                        // contains the drawn power and supplied power.
+auto power = pm.Stop(); // Returns a vector<std::tuple<Time_t, double, double>>, where each entry
+                        // contains the drawn power and supplied power, and Time_t is the time_point
+                        // type defined by std::chrono::high_resolution_clock
 ```
 
 As an optional second argument, `PowerMeter` takes an `std::ostream` where input will be written instead of storing it internally. This can be used to write results directly to a file:
