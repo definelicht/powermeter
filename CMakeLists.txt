@@ -84,18 +84,20 @@ target_link_libraries(powermeter PRIVATE ${LIBUSB_LIBRARY}
                       ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(powermeter PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-                           $<INSTALL_INTERFACE:include>)
+                           $<INSTALL_INTERFACE:include/powermeter>)
 target_include_directories(powermeter SYSTEM PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/OpenCorsairLink/include>
-                           $<INSTALL_INTERFACE:OpenCorsairLink/include>
+                           $<INSTALL_INTERFACE:include/powermeter>
                            ${LIBUSB_INCLUDE_DIR})
 
 # Install files
 install(TARGETS powermeter EXPORT PowerMeterConfig
         LIBRARY DESTINATION lib
+        INCLUDES DESTINATION include/powermeter
         ARCHIVE DESTINATION lib)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(DIRECTORY OpenCorsairLink/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/powermeter)
+install(DIRECTORY OpenCorsairLink/include/ DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/powermeter)
 install(EXPORT PowerMeterConfig DESTINATION cmake)
 export(TARGETS powermeter FILE PowerMeterConfig.cmake)
 
