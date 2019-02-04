@@ -25,6 +25,8 @@ To use the tool within an existing project, either use the provided CMake config
 
 See `examples/Example.cpp` for example usage.
 
+**Note that all executables must be run with `sudo` privileges to interact with the USB interface.**
+
 The `PowerMeter` class provides stopwatch-like functionality for measuring power:
 
 ```cpp
@@ -50,6 +52,14 @@ Or, directly to standard output:
 ```cpp
 PowerMeter pm(50, std::cout); // Samples are written directly to the terminal/standard out
 ```
+
+## Running
+
+The included example executable prints power measurements to standard output for a given time, with a given interval:
+```bash
+sudo ./Example 5 50
+```
+This will print samples every 50 milliseconds for 5 seconds.
 
 ## Bugs and suggestions
 
