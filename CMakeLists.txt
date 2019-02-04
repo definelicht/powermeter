@@ -15,7 +15,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.0)
-project(corsair_power)
+project(corsair_powermeter VERSION 0.1)
+
+include(GNUInstallDirs)
 
 # External dependencies 
 find_package(Threads REQUIRED)
@@ -62,21 +64,41 @@ set(POWERMETER_OPENCORSAIRLINK_FILES
 
 # Override print.h to avoid annoying prints to stdout
 set(POWERMETER_OPENCORSAIRLINK_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/OpenCorsairLink/include)
-configure_file(print.h.in print.h)
-include_directories(${CMAKE_BINARY_DIR})
+configure_file(include/print.h.in print.h)
+
+# Includes
+include_directories(include)
+include_directories(SYSTEM OpenCorsairLink/include ${LIBUSB_INCLUDE_DIR})
 
 # Build OpenCorsairLink as a static library
-include_directories(SYSTEM OpenCorsairLink/include ${LIBUSB_INCLUDE_DIR})
-add_library(opencorsairlink ${POWERMETER_OPENCORSAIRLINK_FILES})
-target_link_libraries(opencorsairlink ${LIBUSB_LIBRARY})
+add_library(opencorsairlink OBJECT ${POWERMETER_OPENCORSAIRLINK_FILES})
+# target_link_libraries(opencorsairlink PRIVATE ${LIBUSB_LIBRARY})
+target_include_directories(opencorsairlink SYSTEM PRIVATE ${CMAKE_BINARY_DIR}
+                           ${POWERMETER_OPENCORSAIRLINK_INCLUDE_DIR}
+                           ${LIBUSB_INCLUDE_DIR})
 
-# Build CorsairPowerLib as a static library
-include_directories(${CMAKE_SOURCE_DIR})
+# Build Corsair PowerMeter as a static library
 set(CMAKE_CXX_FLAGS "-std=c++11")
-set(POWERMETER_SRC PowerMeter.cpp)
-add_library(corsairpower ${POWERMETER_SRC})
-target_link_libraries(corsairpower opencorsairlink ${CMAKE_THREAD_LIBS_INIT})
+add_library(powermeter src/PowerMeter.cpp $<TARGET_OBJECTS:opencorsairlink>)
+target_link_libraries(powermeter PRIVATE ${LIBUSB_LIBRARY}
+                      ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(powermeter PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                           $<INSTALL_INTERFACE:include>)
+target_include_directories(powermeter SYSTEM PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/OpenCorsairLink/include>
+                           $<INSTALL_INTERFACE:OpenCorsairLink/include>
+                           ${LIBUSB_INCLUDE_DIR})
 
-# Test executable 
-add_executable(Test Test.cpp)
-target_link_libraries(Test corsairpower)
+# Install files
+install(TARGETS powermeter EXPORT PowerMeterConfig
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY OpenCorsairLink/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(EXPORT PowerMeterConfig DESTINATION cmake)
+export(TARGETS powermeter FILE PowerMeterConfig.cmake)
+
+# Example executable 
+add_executable(Example examples/Example.cpp)
+target_link_libraries(Example powermeter)
