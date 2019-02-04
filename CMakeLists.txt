@@ -67,7 +67,7 @@ set(POWERMETER_OPENCORSAIRLINK_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/OpenCorsairLink/i
 configure_file(include/print.h.in print.h)
 
 # Includes
-include_directories(include)
+include_directories(${CMAKE_BINARY_DIR} include)
 include_directories(SYSTEM OpenCorsairLink/include ${LIBUSB_INCLUDE_DIR})
 
 # Build OpenCorsairLink as a static library
@@ -82,22 +82,16 @@ set(CMAKE_CXX_FLAGS "-std=c++11")
 add_library(powermeter src/PowerMeter.cpp $<TARGET_OBJECTS:opencorsairlink>)
 target_link_libraries(powermeter PRIVATE ${LIBUSB_LIBRARY}
                       ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(powermeter PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-                           $<INSTALL_INTERFACE:include/powermeter>)
-target_include_directories(powermeter SYSTEM PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/OpenCorsairLink/include>
-                           $<INSTALL_INTERFACE:include/powermeter>
-                           ${LIBUSB_INCLUDE_DIR})
 
 # Install files
 install(TARGETS powermeter EXPORT PowerMeterConfig
         LIBRARY DESTINATION lib
         INCLUDES DESTINATION include/powermeter
         ARCHIVE DESTINATION lib)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/powermeter)
 install(DIRECTORY OpenCorsairLink/include/ DESTINATION
         ${CMAKE_INSTALL_INCLUDEDIR}/powermeter)
+install(FILES include/PowerMeter.h DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/powermeter) 
 install(EXPORT PowerMeterConfig DESTINATION cmake)
 export(TARGETS powermeter FILE PowerMeterConfig.cmake)
 
