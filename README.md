@@ -9,6 +9,8 @@ The sampling rate is configurable, and results can be either stored in memory, o
 
 ## Building and installing
 
+_Make sure to clone with `--recursive`, or pull submodules with `git submodule update --init`_ to fetch the [OpenCorsairLink](https://github.com/audiohacked/OpenCorsairLink) dependency.
+
 The project uses a standard CMake setup:
 ```bash
 mkdir build
