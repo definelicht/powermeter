@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "PowerMeter.h"
+#include <chrono>
 #include <iostream>
 
 // This program outputs the total and supplied power to standard output for a
