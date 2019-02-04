@@ -48,7 +48,9 @@ void PowerMeter::Init() {
     throw std::runtime_error("Failed to retrieve Corsair devices.");
   }
   if (device_count < 1) {
-    throw std::runtime_error("No Corsair devices found.");
+    throw std::runtime_error(
+        "No Corsair devices found. Did you remember to run with sudo "
+        "privileges?");
   }
 
   // Detect PSU
