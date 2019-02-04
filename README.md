@@ -34,8 +34,8 @@ PowerMeter pm(50);      // Write samples directly to standard output every 50 mi
 pm.Start();             // Start sampling
 // ...do interesting work...
 auto power = pm.Stop(); // Returns a vector<std::tuple<Time_t, double, double>>, where each entry
-                        // contains the drawn power and supplied power, and Time_t is the time_point
-                        // type defined by std::chrono::high_resolution_clock
+                        // contains the drawn power and supplied power, and Time_t is the type
+                        // defined by std::chrono::high_resolution_clock::time_point
 ```
 
 As an optional second argument, `PowerMeter` takes an `std::ostream` where input will be written instead of storing it internally. This can be used to write results directly to a file:
@@ -52,6 +52,12 @@ Or, directly to standard output:
 
 ```cpp
 PowerMeter pm(50, std::cout); // Samples are written directly to the terminal/standard out
+```
+
+The timestamps are returned as `std::chrono::high_resolution_clock::time_point`, and can be converted to microseconds since epoch by using:
+
+```cpp
+sample.time_since_epoch().count()
 ```
 
 ## Running
