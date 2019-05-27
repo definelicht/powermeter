@@ -1,6 +1,6 @@
 ## Overview
 
-This tool enables the readout of drawn power and supplied power from [Corsair RMi-series](https://www.corsair.com/us/en/Power/Plug-Type/rmi-series-config/p/CP-9020082-NA) power supplies through in a stopwatch-like fashion, using the [OpenCorsairLink](https://github.com/audiohacked/OpenCorsairLink) project as a driver for the USB interface.
+This tool enables the readout of drawn power and supplied power from [Corsair RMi-series](https://www.corsair.com/us/en/Power/Plug-Type/rmi-series-config/p/CP-9020082-NA) power supplies in a stopwatch-like fashion, using the [OpenCorsairLink](https://github.com/audiohacked/OpenCorsairLink) project as a driver for the USB interface.
 The sampling rate is configurable, and results can be either stored in memory, or written directly to a file.
 
 ## Prerequisties
