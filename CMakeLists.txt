@@ -63,11 +63,12 @@ set(POWERMETER_OPENCORSAIRLINK_FILES
 		OpenCorsairLink/print.c)
 
 # Override print.h to avoid annoying prints to stdout
-set(POWERMETER_OPENCORSAIRLINK_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/OpenCorsairLink/include)
+FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/OpenCorsairLink/include/print.h 
+     POWERMETER_CORSAIRLINK_PRINT_H)
 configure_file(include/print.h.in print.h)
 
 # Includes
-include_directories(${CMAKE_BINARY_DIR} include)
+include_directories(${CMAKE_CURRENT_BINARY_DIR} include)
 include_directories(SYSTEM OpenCorsairLink/include ${LIBUSB_INCLUDE_DIR})
 
 # Build OpenCorsairLink as a static library

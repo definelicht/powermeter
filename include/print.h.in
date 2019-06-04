@@ -1,4 +1,4 @@
-#include "${POWERMETER_OPENCORSAIRLINK_INCLUDE_DIR}/print.h"
+${POWERMETER_CORSAIRLINK_PRINT_H}
 
 #undef msg_err
 #undef msg_warn 
